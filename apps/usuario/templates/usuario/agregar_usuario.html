@@ -1,0 +1,36 @@
+{% extends 'base/base.html' %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+
+{% block title_block %} Agregar usuario{% endblock %}
+
+
+{% block title_content_block %}Agregar usuario{% endblock %}
+
+{% block css_block %}
+
+<!-- Select2 -->
+{{ form.media.css }}
+
+<link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+{% endblock %}
+
+{% block content_block %}
+
+<form method="post">{% csrf_token %}
+
+        {{ form }}
+
+    <input type="submit" value="Agregar">
+</form>
+
+{% endblock %}
+
+
+{% block js_block %}
+
+{{ form.media.js }}
+
+{% endblock %}
