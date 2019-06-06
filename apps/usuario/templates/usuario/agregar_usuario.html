@@ -1,5 +1,4 @@
 {% extends 'base/base.html' %}
-{% load bootstrap3 %}
 {% load staticfiles %}
 
 
@@ -12,25 +11,50 @@
 
 <!-- Select2 -->
 {{ form.media.css }}
-
 <link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
 
 {% endblock %}
 
 {% block content_block %}
 
-<form method="post">{% csrf_token %}
-
-        {{ form }}
-
-    <input type="submit" value="Agregar">
+<form method="post" id="form_usuario">{% csrf_token %}
+    {{ form }}
+    <div class="row">
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Agregar</button>
+        </div>
+    </div>
 </form>
 
 {% endblock %}
 
 
 {% block js_block %}
+<script type="text/javascript">
 
+    $("#form_usuario").submit(function (event) {
+        event.preventDefault(); //prevent default action
+        var post_url = "{% url 'agregar_usuario' %}"; //get form action url
+        var request_method = $(this).attr("method"); //get form GET/POST method
+        var form_data = $(this).serialize(); //Encode form elements for submission
+
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            data: form_data
+        }).done(function (response) { //
+            setTimeout(function () {
+                toastr.options = {
+                    "closeButton": true,
+                    "progressBar": true,
+                    "showEasing": "swing"
+                }
+                toastr ["success"](response)
+            }, 500);
+        });
+    });
+
+</script>
 {{ form.media.js }}
 
 {% endblock %}

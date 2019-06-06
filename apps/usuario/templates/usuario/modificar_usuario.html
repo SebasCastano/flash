@@ -1,10 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base/base.html' %}
+{% load staticfiles %}
 
-</body>
-</html>
+
+{% block title_block %} Modificar usuario{% endblock %}
+
+
+{% block title_content_block %}Modificar usuario{% endblock %}
+
+{% block css_block %}
+
+<!-- Select2 -->
+{{ form.media.css }}
+
+<link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
+
+{% endblock %}
+
+{% block content_block %}
+
+<form method="post" id="form_modificar_usuario">{% csrf_token %}
+    {{ form }}
+    <div class="row">
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Modificar</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+
+{% block js_block %}
+
+{{ form.media.js }}
+
+<script type="text/javascript">
+
+    $("#form_modificar_usuario").submit(function (event) {
+        event.preventDefault(); //prevent default action
+        var post_url = "{% url 'modificar_usuario' id_usuario %}"; //get form action url
+        var request_method = $(this).attr("method"); //get form GET/POST method
+        var form_data = $(this).serialize(); //Encode form elements for submission
+
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            data: form_data
+        }).done(function (response) { //
+            console.log("Listo el pollo")
+        });
+    });
+
+</script>
+
+{% endblock %}

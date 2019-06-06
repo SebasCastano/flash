@@ -12,7 +12,7 @@ class Usuario(AbstractUser):
         ('Auxiliar operacion', 'Auxiliar operacion')
     )
     cargo = models.CharField(max_length=30, choices=CARGOS_USUARIO_CHOICES)
-    direccion = models.CharField(max_length=100)
+    direccion = models.CharField(max_length=100, blank=True)
     telefono = models.CharField(max_length=12, blank=True)
     celular = models.CharField(max_length=12, blank=True)
     fecha_nacimiento = models.DateField()
