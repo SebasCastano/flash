@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.usuario',
-    'django_select2',
-    'bootstrap3'
 ]
 
 AUTH_USER_MODEL = 'usuario.usuario'

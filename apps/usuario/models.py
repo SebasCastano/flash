@@ -15,10 +15,3 @@ class Usuario(AbstractUser):
     direccion = models.CharField(max_length=100, blank=True)
     telefono = models.CharField(max_length=12, blank=True)
     celular = models.CharField(max_length=12, blank=True)
-
-    def __str__(self):
-        empleado = self.username + ' - ' + self.first_name + ' ' + self.last_name
-        return empleado
-
-    def get_cargo(self):
-        return self.cargo

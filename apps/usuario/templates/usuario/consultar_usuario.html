@@ -1,27 +1,15 @@
 {% extends 'base/base.html' %}
 {% load staticfiles %}
 
-
 {% block title_block %} Consultar usuario{% endblock %}
-
 
 {% block title_content_block %}Consultar usuario{% endblock %}
 
-{% block css_block %}
-
-<!-- Select2 -->
-{{ form.media.css }}
-
-<link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
-
-{% endblock %}
-
 {% block content_block %}
-
 <div class="row">
     <div class="col-md-12 ">
         <div class="table-responsive">
-            <table id="example1" class="table table-bordered table-striped my_datatable">
+            <table id="tabla_usuarios" class="table table-bordered table-striped my_datatable">
                 <thead>
                 <tr>
                     <th>Identificación</th>
@@ -34,18 +22,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for usuario in object_list %}
-                <tr>
-                    <td>{{ usuario.username }}</td>
-                    <td>{{ usuario.first_name }}</td>
-                    <td>{{ usuario.last_name }}</td>
-                    <td>{{ usuario.cargo }}</td>
-                    <td>{{ usuario.email }}</td>
-                    <td>{{ usuario.is_active }}</td>
-                    <td><a href="{% url 'modificar_usuario' usuario.id %}" class="btn btn-sm btn-info"
-                           style="text-align: center">Modificar</a></td>
-                </tr>
-                {% endfor %}
                 </tbody>
                 <tfoot>
                 <tr>
@@ -63,24 +39,35 @@
 
     </div>
 </div>
-
 {% endblock %}
 
-
 {% block js_block %}
-
-{{ form.media.js }}
-
 <script type="text/javascript">
-    $.ajax({
-        url: form.attr("data-validate-username-url"),
-        data: form.serialize(),
-        dataType: 'json',
-        success: function (data) {
-            if (data.is_taken) {
-                alert(data.error_message);
-            }
-        }
+    $(function () {
+        var post_url = "{% url 'get_usuario_ajax' %}"; //get form action url
+
+        $.ajax({
+            url: post_url,
+            type: "GET",
+        }).done(function (response) {
+            console.log(response)
+            $.each(response, function (i, usuario) {
+                $('#tabla_usuarios tbody').after("<tr> " +
+                    "<td>" + usuario.identificacion + "</td><td>" + usuario.nombre + "</td><td>"
+                    + usuario.apellido + "</td><td>" + usuario.cargo + "</td><td>" + usuario.email + "</td><td>" +
+                    usuario.estado + "</td><td>" +
+                    "<a href= '/usuario/modificar/" + usuario.id + "'" + " class='btn btn-sm btn-info' style='text-align: center'>Modificar</a></td></td></tr>");
+            });
+        }).fail(function () {
+            setTimeout(function () {
+                toastr.options = {
+                    "closeButton": true,
+                    "progressBar": true,
+                    "showEasing": "swing"
+                }
+                toastr ["error"]("Se produjo un error en el servidor")
+            }, 500);
+        })
     });
 </script>
 {% endblock %}

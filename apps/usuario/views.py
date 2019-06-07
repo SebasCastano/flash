@@ -1,13 +1,11 @@
-from django.http import Http404, JsonResponse, HttpResponse
-from django.shortcuts import redirect
+from django.http import JsonResponse
 from django.urls import reverse_lazy
-from django.views.generic.base import View
+from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
-
 from apps.usuario.forms import AgregarUsuarioForm, ModificarUsuarioForm
-from django.views.generic.edit import CreateView, UpdateView, FormMixin
-
+from django.views.generic.edit import CreateView, UpdateView
 from apps.usuario.models import Usuario
+
 
 class AgregarUsuario(CreateView):
     model = Usuario
@@ -20,13 +18,27 @@ class AgregarUsuario(CreateView):
         if form.is_valid():
             form.save()
             return JsonResponse({'valid': True, 'mensaje': "Usuario registrado"})
-        print(form.errors)
         return JsonResponse({'valid': False, 'mensaje': "Error al registrar el usuario"})
 
 
-class ConsultarUsuarios(ListView):
-    model = Usuario
+class ConsultarUsuarios(TemplateView):
     template_name = 'usuario/consultar_usuario.html'
+
+
+class GetUsuariosAjax(ListView):
+    model = Usuario
+
+    def get(self, request, *args, **kwargs):
+        usuarios = []
+        usuarios_qs = self.model.objects.all()
+        for usuario in usuarios_qs:
+            estado = "Inactivo"
+            if (usuario.is_active):
+                estado = "Activo"
+            temp = {'id': usuario.id, 'identificacion': usuario.username, 'nombre': usuario.first_name,
+                    'apellido': usuario.last_name, 'cargo': usuario.cargo, 'email': usuario.email, 'estado': estado}
+            usuarios.append(temp)
+        return JsonResponse(usuarios, safe=False)
 
 
 class ModificarUsuario(UpdateView):
@@ -38,12 +50,18 @@ class ModificarUsuario(UpdateView):
     id_usuario = None
 
     def get_context_data(self, **kwargs):
-        """ get_context_data let you fill the template context """
         context = super(ModificarUsuario, self).get_context_data(**kwargs)
-        # Get Related publishers
         context['id_usuario'] = self.id_usuario
         return context
 
     def get_object(self, queryset=None):
         self.id_usuario = self.kwargs['id_usuario']
         return Usuario.objects.get(id=self.id_usuario)
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance=Usuario.objects.get(pk=self.kwargs['id_usuario']))
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'valid': True, 'mensaje': "Usuario modificado"})
+        print(form.errors)
+        return JsonResponse({'valid': False, 'mensaje': "Error al modificar el usuario"})

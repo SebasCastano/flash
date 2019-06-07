@@ -1,22 +1,11 @@
 {% extends 'base/base.html' %}
 {% load staticfiles %}
 
-
 {% block title_block %} Agregar usuario{% endblock %}
-
 
 {% block title_content_block %}Agregar usuario{% endblock %}
 
-{% block css_block %}
-
-<!-- Select2 -->
-{{ form.media.css }}
-<link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
-
-{% endblock %}
-
 {% block content_block %}
-
 <form method="post" id="form_usuario">{% csrf_token %}
     {{ form }}
     <div class="row">
@@ -25,7 +14,6 @@
         </div>
     </div>
 </form>
-
 {% endblock %}
 
 
@@ -33,10 +21,10 @@
 <script type="text/javascript">
 
     $("#form_usuario").submit(function (event) {
-        event.preventDefault(); //prevent default action
-        var post_url = "{% url 'agregar_usuario' %}"; //get form action url
-        var request_method = $(this).attr("method"); //get form GET/POST method
-        var form_data = $(this).serialize(); //Encode form elements for submission
+        event.preventDefault();
+        var post_url = "{% url 'agregar_usuario' %}";
+        var request_method = $(this).attr("method");
+        var form_data = $(this).serialize();
 
         $.ajax({
             url: post_url,
@@ -56,12 +44,9 @@
             }, 500);
             if(valid){
                 $("#form_usuario")[0].reset();
-                //window.location.reload();
             }
         });
     });
 
 </script>
-{{ form.media.js }}
-
 {% endblock %}

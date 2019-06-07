@@ -1,23 +1,11 @@
 {% extends 'base/base.html' %}
 {% load staticfiles %}
 
-
 {% block title_block %} Modificar usuario{% endblock %}
-
 
 {% block title_content_block %}Modificar usuario{% endblock %}
 
-{% block css_block %}
-
-<!-- Select2 -->
-{{ form.media.css }}
-
-<link rel="stylesheet" href="{% static 'css/css_personalizados.css' %}">
-
-{% endblock %}
-
 {% block content_block %}
-
 <form method="post" id="form_modificar_usuario">{% csrf_token %}
     {{ form }}
     <div class="row">
@@ -26,14 +14,10 @@
         </div>
     </div>
 </form>
-
 {% endblock %}
 
 
 {% block js_block %}
-
-{{ form.media.js }}
-
 <script type="text/javascript">
 
     $("#form_modificar_usuario").submit(function (event) {
@@ -46,11 +30,19 @@
             url: post_url,
             type: request_method,
             data: form_data
-        }).done(function (response) { //
-            console.log("Listo el pollo")
+        }).done(function (response) {
+            var valid = response.valid;
+            var mensaje = response.mensaje;
+            var tipoRespuesta = valid ? 'success' : 'error';
+            setTimeout(function () {
+                toastr.options = {
+                    "closeButton": true,
+                    "progressBar": true,
+                    "showEasing": "swing"
+                }
+                toastr [tipoRespuesta](mensaje)
+            }, 500);
         });
     });
-
 </script>
-
 {% endblock %}

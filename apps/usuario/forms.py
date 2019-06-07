@@ -1,10 +1,5 @@
-from datetime import datetime
-
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.forms import SelectDateWidget
-from django_select2.forms import Select2Widget
-
 from apps.usuario.models import Usuario
 
 
@@ -28,9 +23,6 @@ class AgregarUsuarioForm(UserCreationForm):
         fields = ('username', 'first_name', 'last_name', 'email', 'telefono', 'celular', 'direccion', 'cargo',
                   'password1', 'password2')
 
-        widgets = {
-            "cargo": Select2Widget(),
-        }
         labels = {
             'username': 'Identificacion',
             'first_name': 'Nombre(s)',
@@ -38,6 +30,7 @@ class AgregarUsuarioForm(UserCreationForm):
             'telefono': 'Teléfono',
             'email': 'Correo electrónico',
         }
+
 
 class ModificarUsuarioForm(forms.ModelForm):
     password1 = forms.CharField(required=False, widget=forms.PasswordInput(), label='Contraseña')
@@ -72,11 +65,8 @@ class ModificarUsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = ('username', 'first_name', 'last_name', 'email', 'telefono', 'celular', 'direccion', 'cargo',
-                    'is_active')
+                  'is_active')
 
-        widgets = {
-            "cargo": Select2Widget()
-        }
         labels = {
             'username': 'Identificacion',
             'first_name': 'Nombre(s)',
