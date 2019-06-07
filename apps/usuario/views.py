@@ -18,10 +18,10 @@ class AgregarUsuario(CreateView):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            form.save();
-            return HttpResponse('Usuario guardado con éxito')
+            form.save()
+            return JsonResponse({'valid': True, 'mensaje': "Usuario registrado"})
         print(form.errors)
-        return HttpResponse('Error al guardar el usuario')
+        return JsonResponse({'valid': False, 'mensaje': "Error al registrar el usuario"})
 
 
 class ConsultarUsuarios(ListView):

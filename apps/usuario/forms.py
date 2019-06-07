@@ -20,19 +20,16 @@ class AgregarUsuarioForm(UserCreationForm):
         self.fields['celular'].widget.attrs['class'] = "form-control"
         self.fields['direccion'].widget.attrs['class'] = "form-control"
         self.fields['cargo'].widget.attrs['class'] = "form-control"
-        self.fields['fecha_nacimiento'].widget.attrs['class'] = "form-control"
-        #self.fields['fecha_nacimiento'].widget.attrs['data-provide'] = "datepicker-inline"
         self.fields['password1'].widget.attrs['class'] = "form-control"
         self.fields['password2'].widget.attrs['class'] = "form-control"
 
     class Meta:
         model = Usuario
         fields = ('username', 'first_name', 'last_name', 'email', 'telefono', 'celular', 'direccion', 'cargo',
-                  'fecha_nacimiento', 'password1', 'password2')
+                  'password1', 'password2')
 
         widgets = {
             "cargo": Select2Widget(),
-            "fecha_nacimiento": SelectDateWidget(years=range(1940, datetime.now().year + 1))
         }
         labels = {
             'username': 'Identificacion',
@@ -57,8 +54,6 @@ class ModificarUsuarioForm(forms.ModelForm):
         self.fields['celular'].widget.attrs['class'] = "form-control"
         self.fields['direccion'].widget.attrs['class'] = "form-control"
         self.fields['cargo'].widget.attrs['class'] = "form-control"
-        self.fields['fecha_nacimiento'].widget.attrs['class'] = "form-control"
-        #self.fields['fecha_nacimiento'].widget.attrs['data-provide'] = "datepicker-inline"
         self.fields['password1'].widget.attrs['class'] = "form-control"
         self.fields['password2'].widget.attrs['class'] = "form-control"
 
@@ -77,11 +72,10 @@ class ModificarUsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = ('username', 'first_name', 'last_name', 'email', 'telefono', 'celular', 'direccion', 'cargo',
-                  'fecha_nacimiento', 'is_active')
+                    'is_active')
 
         widgets = {
-            "cargo": Select2Widget(),
-            "fecha_nacimiento": SelectDateWidget(years=range(1940, datetime.now().year + 1))
+            "cargo": Select2Widget()
         }
         labels = {
             'username': 'Identificacion',

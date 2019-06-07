@@ -42,15 +42,22 @@
             url: post_url,
             type: request_method,
             data: form_data
-        }).done(function (response) { //
+        }).done(function (response) {
+            var valid = response.valid;
+            var mensaje = response.mensaje;
+            var tipoRespuesta = valid ? 'success' : 'error';
             setTimeout(function () {
                 toastr.options = {
                     "closeButton": true,
                     "progressBar": true,
                     "showEasing": "swing"
                 }
-                toastr ["success"](response)
+                toastr [tipoRespuesta](mensaje)
             }, 500);
+            if(valid){
+                $("#form_usuario")[0].reset();
+                //window.location.reload();
+            }
         });
     });
 
